@@ -1,24 +1,27 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+
+import { Router, Route } from "react-router-dom";
+
+import history from "./history";
+
+import FirstPage from './components/FirstPage';
+import CredentialPage from './components/CredentialsPage';
+import Test_Select from './components/Test_Select';
+import Common from './components/Common';
+import Final_Page from './components/Final_Page';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Router history={history}>
+        <div>
+          <Route path="/" exact component={FirstPage} />
+          <Route path="/credentials" exact component={CredentialPage} />
+          <Route path="/test" exact component ={Test_Select} />
+          <Route path="/common" exact component = {Common} />
+          <Route path="/final" exact component = {Final_Page} />
+        </div>
+      </Router>
     </div>
   );
 }
