@@ -1,6 +1,11 @@
 import React from 'react';
+import {withRouter} from 'react-router';
 
-const Final_Page = () =>{
+const Final_Page = ({history}) =>{
+    window.addEventListener("popstate", () => {
+        history.push('/');
+      });
+    
     return(
         <div>
             You have completed the test.
@@ -8,4 +13,4 @@ const Final_Page = () =>{
     );
 }
 
-export default Final_Page;
+export default withRouter(Final_Page);

@@ -13,7 +13,7 @@ const languageOptions = [
 const Test_Select = () => {
     return (
         <div style ={{"paddingTop" : "200px" , "paddingLeft":"400px" , "fontSize" : "30px"}}>
-            Enter the Language test must happen in <br /><br />
+            Select the Language  <br /><br />
         <div > 
             <Dropdown
                 button
