@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Radio, Button } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {withRouter} from 'react-router';
 
@@ -21,6 +21,7 @@ class Common extends React.Component {
       score: 0,
       correct_q: []
     }
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   handleChange = (e, { value }) => this.setState({ value })
@@ -77,26 +78,32 @@ class Common extends React.Component {
 
   }
 
-   onSubmit = () => {
-    const { q, correct_q, score, value } = this.state;
+  async onSubmit(){
+    const { correct_q, score, value , q } = this.state;
     value === data[q].Correct ?
       correct_q.includes(q) ?
-        this.props.history.push('/final') :
+      this.props.history.push('/final') :
         this.setState({
-          score: score + 1
-        })
-      :
-      correct_q.includes(q) ?
-       this.setState({
-          score: score - 1
+          score: score + 1,
+          correct_q : [...correct_q , q]
+        } , async () => {
+          await this.props.score_final(score);
+          this.props.history.push('/final')
         }) :
+      correct_q.includes(q) ?
+        this.setState({
+          score: score - 1,
+          correct_q: correct_q.filter(item => item !== q)
+        }, async () => {
+          await this.props.score_final(score);
+          this.props.history.push('/final')
+        }) 
+        :
         this.props.history.push('/final')
-    this.props.history.push('/final');
+        
    }
-  componentWillUnmount() {
-    
-    this.props.score_final(this.state.score);
-  }
+
+  //  onSubmit().then(this.props.history.push('/final'));
 
   render() {
     console.log(this.state.score);
@@ -135,7 +142,7 @@ class Common extends React.Component {
           </Form.Field>
           <Button size='large' primary disabled={this.state.q <= 0} onClick={this.onPrevClickHandler} content="Previous" />
           <Button size='large' positive disabled={this.state.q >= data.length - 1} onClick={this.onNextClickHandler} content="Next" /> 
-          <Button size='large' negative as = {Link} to = '/final' onClick={this.onSubmit } content="Submit Test" /> 
+          <Button size='large' negative onClick= {this.onSubmit} content="Submit Test" /> 
         </Form>
         <TimerComponent />
       </div>
