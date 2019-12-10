@@ -1,5 +1,5 @@
 import React from "react";
-import {withRouter} from 'react-router';
+import { withRouter } from 'react-router';
 
 // import ReactDOM from "react-dom";
 
@@ -19,7 +19,9 @@ class Timer extends React.Component {
   render() {
     return (
       <div>
-        <h1 style={{ fontSize: 100, marginLeft:100 }}>{this.props.value}:{this.props.seconds}</h1>
+        <br />
+        <h1 style={{ "fontSize": "25px", "fontColor": "red" }}>
+          Time Remaining  {this.props.value}:{this.props.seconds}</h1>
       </div>
     );
   }
@@ -42,7 +44,7 @@ class TimerComponent extends React.Component {
     this.state = {
       seconds: '00',
       value: '02',
-      isClicked : false
+      isClicked: false
     }
 
     // this.handleChange = this.handleChange.bind(this);
@@ -50,7 +52,7 @@ class TimerComponent extends React.Component {
     this.tick = this.tick.bind(this);
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.startCountDown();
   }
 
@@ -97,39 +99,24 @@ class TimerComponent extends React.Component {
     let time = this.state.value;
     this.secondsRemaining = time * 60;
     this.setState({
-      isClicked : true
+      isClicked: true
     })
   }
 
   render() {
-    const clicked = this.state.isClicked;
-    if(clicked){
     return (
       <div>
         <div className="row">
           <div className="col-md-4"></div>
-          <div className="col-md-4">
+          <div className="col-md-6">
             <Timer value={this.state.value} seconds={this.state.seconds} />
           </div>
         </div>
       </div>
     );
-    }else{
-      return (
-        <div>
-          <div className="row">
-            <div className="col-md-4"></div>
-            <div className="col-md-4">
-              {/* <TimerInput value={this.state.value} handleChange={this.handleChange} /> */}
-              <Timer value={this.state.value} seconds={this.state.seconds} />
-              {/* <StartButton startCountDown={this.startCountDown} value={this.state.value} /> */}
-            </div>
-          </div>
-        </div>
-      );
-    }
   }
-}
+};
+
 
 export default withRouter(TimerComponent);
 // const rootElement = document.getElementById("root");

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Radio, Button } from 'semantic-ui-react';
+import { Form, Radio, Button , Segment ,Image } from 'semantic-ui-react';
 // import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {withRouter} from 'react-router';
@@ -109,9 +109,11 @@ class Common extends React.Component {
     console.log(this.state.score);
     return (
       <div>
-        <Form>
+      <div style = {{ 'marginLeft' : '200px' , 'paddingTop': '50px' , 'marginRight' : '200px', "fontSize" : "30px" }}>
+        <Segment >
+        <Form className ="ui huge form" style = {{"fontColor" : "white"}}>
           <Form.Field>
-            {`${data[this.state.q].Question}`}
+            {`${data[this.state.q].id}. ${data[this.state.q].Question}`}
           </Form.Field>
           <Form.Field>
             <Radio
@@ -145,6 +147,9 @@ class Common extends React.Component {
           <Button size='large' negative onClick= {this.onSubmit} content="Submit Test" /> 
         </Form>
         <TimerComponent />
+        </Segment>
+      </div>
+      <Image src="images/Perficient_logo.jpg" className="ui centered image" size='medium' style={{ "marginTop": "90px" }} />
       </div>
     )
   }

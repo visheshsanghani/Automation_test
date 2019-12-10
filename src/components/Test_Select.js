@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Dropdown } from 'semantic-ui-react';
+import { Dropdown , Image } from 'semantic-ui-react';
 
 
 
@@ -12,7 +12,7 @@ const languageOptions = [
 
 const Test_Select = () => {
     return (
-        <div style ={{"paddingTop" : "200px" , "paddingLeft":"400px" , "fontSize" : "30px"}}>
+        <div style ={{"paddingTop" : "150px" , "marginLeft":"420px" , "fontSize" : "30px"}}>
             Select the Language  <br /><br />
         <div > 
             <Dropdown
@@ -23,13 +23,14 @@ const Test_Select = () => {
                 icon='world'
                 options={languageOptions}
                 search
-                text='Select Language'>
+                text='Technology'>
                 <Dropdown.Menu>
                     <Dropdown.Item as={Link} to='/common' text="Java" />
                     <Dropdown.Item as={Link} to='/common' text="HTML CSS" />
                 </Dropdown.Menu>
             </Dropdown>
         </div>
+        <Image src="images/Perficient_logo.jpg" size='medium' style={{ "marginTop": "205px" }} />
         </div>
     )
 }
