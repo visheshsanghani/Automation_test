@@ -1,8 +1,8 @@
 import React from 'react';
-import { Form, Radio, Button , Segment ,Image } from 'semantic-ui-react';
+import { Form, Radio, Button, Segment, Image } from 'semantic-ui-react';
 // import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import {withRouter} from 'react-router';
+import { withRouter } from 'react-router';
 
 import TimerComponent from './TimerComponent';
 import { score_final } from '../actions';
@@ -17,14 +17,21 @@ class Common extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      q: 0,
-      score: 0,
-      correct_q: []
+      q: Number(localStorage.getItem('q')) || 0,
+      score: Number(localStorage.getItem('score')) || 0,
+      correct_q: JSON.parse(localStorage.getItem('correct_q')) || [],
+      answers: []
     }
-    this.onSubmit = this.onSubmit.bind(this);
+    // this.onSubmit = this.onSubmit.bind(this);
   }
 
-  handleChange = (e, { value }) => this.setState({ value })
+  handleChange = (e, { value }) => {
+    // const q = localStorage.getItem('q');
+    this.setState({
+      value,
+      answers: [...this.state.answers, { q : value }]
+    })
+  }
 
   onNextClickHandler = () => {
     const { q, correct_q, score, value } = this.state;
@@ -78,16 +85,17 @@ class Common extends React.Component {
 
   }
 
-  async onSubmit(){
-    const { correct_q, score, value , q } = this.state;
+  onSubmit = async () => {
+    const { correct_q, score, value, q } = this.state;
+    console.log("submit", score)
     value === data[q].Correct ?
       correct_q.includes(q) ?
-      this.props.history.push('/final') :
+        this.props.history.push('/final') :
         this.setState({
           score: score + 1,
-          correct_q : [...correct_q , q]
-        } , async () => {
-          await this.props.score_final(score);
+          correct_q: [...correct_q, q]
+        }, async () => {
+          await this.props.score_final(score)
           this.props.history.push('/final')
         }) :
       correct_q.includes(q) ?
@@ -97,59 +105,66 @@ class Common extends React.Component {
         }, async () => {
           await this.props.score_final(score);
           this.props.history.push('/final')
-        }) 
+        })
         :
         this.props.history.push('/final')
-        
-   }
+  }
 
-  //  onSubmit().then(this.props.history.push('/final'));
+  componentDidUpdate() {
+    localStorage.setItem('correct_q', JSON.stringify(this.state.correct_q))
+    localStorage.setItem('score', this.state.score);
+    localStorage.setItem('q', this.state.q);
+  }
 
+  componentWillUnmount() {
+    localStorage.removeItem('score');
+    localStorage.removeItem('q');
+    localStorage.removeItem('correct_q');
+  }
   render() {
-    console.log(this.state.score);
     return (
       <div>
-      <div style = {{ 'marginLeft' : '200px' , 'paddingTop': '50px' , 'marginRight' : '200px', "fontSize" : "30px" }}>
-        <Segment >
-        <Form className ="ui huge form" style = {{"fontColor" : "white"}}>
-          <Form.Field>
-            {`${data[this.state.q].id}. ${data[this.state.q].Question}`}
-          </Form.Field>
-          <Form.Field>
-            <Radio
-              label={`${data[this.state.q].Option_1}`}
-              name='radioGroup'
-              value={`${data[this.state.q].Option_1}`}
-              checked={this.state.value === `${data[this.state.q].Option_1}`}
-              onChange={this.handleChange}
-            />
-          </Form.Field>
-          <Form.Field>
-            <Radio
-              label={`${data[this.state.q].Option_2}`}
-              name='radioGroup'
-              value={`${data[this.state.q].Option_2}`}
-              checked={this.state.value === `${data[this.state.q].Option_2}`}
-              onChange={this.handleChange}
-            />
-          </Form.Field>
-          <Form.Field>
-            <Radio
-              label={`${data[this.state.q].Option_3}`}
-              name='radioGroup'
-              value={`${data[this.state.q].Option_3}`}
-              checked={this.state.value === `${data[this.state.q].Option_3}`}
-              onChange={this.handleChange}
-            />
-          </Form.Field>
-          <Button size='large' primary disabled={this.state.q <= 0} onClick={this.onPrevClickHandler} content="Previous" />
-          <Button size='large' positive disabled={this.state.q >= data.length - 1} onClick={this.onNextClickHandler} content="Next" /> 
-          <Button size='large' negative onClick= {this.onSubmit} content="Submit Test" /> 
-        </Form>
-        <TimerComponent />
-        </Segment>
-      </div>
-      <Image src="images/Perficient_logo.jpg" className="ui centered image" size='medium' style={{ "marginTop": "90px" }} />
+        <div style={{ 'marginLeft': '200px', 'paddingTop': '50px', 'marginRight': '200px', "fontSize": "30px" }}>
+          <Segment >
+            <Form className="ui huge form" style={{ "fontColor": "white" }}>
+              <Form.Field>
+                {`${data[this.state.q].id}. ${data[this.state.q].Question}`}
+              </Form.Field>
+              <Form.Field>
+                <Radio
+                  label={`${data[this.state.q].Option_1}`}
+                  name='radioGroup'
+                  value={`${data[this.state.q].Option_1}`}
+                  checked={this.state.value === `${data[this.state.q].Option_1}`}
+                  onChange={this.handleChange}
+                />
+              </Form.Field>
+              <Form.Field>
+                <Radio
+                  label={`${data[this.state.q].Option_2}`}
+                  name='radioGroup'
+                  value={`${data[this.state.q].Option_2}`}
+                  checked={this.state.value === `${data[this.state.q].Option_2}`}
+                  onChange={this.handleChange}
+                />
+              </Form.Field>
+              <Form.Field>
+                <Radio
+                  label={`${data[this.state.q].Option_3}`}
+                  name='radioGroup'
+                  value={`${data[this.state.q].Option_3}`}
+                  checked={this.state.value === `${data[this.state.q].Option_3}`}
+                  onChange={this.handleChange}
+                />
+              </Form.Field>
+              <Button type='button' size='large' primary disabled={this.state.q <= 0} onClick={this.onPrevClickHandler} content="Previous" />
+              <Button type='button' size='large' positive disabled={this.state.q >= data.length - 1} onClick={this.onNextClickHandler} content="Next" />
+              <Button type='button' size='large' negative onClick={this.onSubmit} content="Submit Test" />
+            </Form>
+            <TimerComponent />
+          </Segment>
+        </div>
+        <Image src="images/Perficient_logo.jpg" className="ui centered image" size='medium' style={{ "marginTop": "90px" }} />
       </div>
     )
   }
